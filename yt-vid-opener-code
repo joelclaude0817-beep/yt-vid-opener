@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+"""
+YouTube Video Opener for Termux
+Opens YouTube videos with a nice terminal interface
+"""
+
+import sys
+import subprocess
+import time
+import urllib.parse
+
+def print_banner():
+    """Display a nice banner"""
+    banner = """
+╔═══════════════════════════════════════╗
+║     YouTube Video Opener v1.0         ║
+╚═══════════════════════════════════════╝
+    """
+    print(banner)
+
+def animate_opening(video_title):
+    """Show opening animation"""
+    print(f"\n🎬 Opening [{video_title}]", end="", flush=True)
+    for _ in range(3):
+        time.sleep(0.5)
+        print(".", end="", flush=True)
+    print(" ✓\n")
+
+def search_and_open(query):
+    """Search YouTube and open the video"""
+    # Create YouTube search URL
+    search_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote(query)}"
+    
+    # For direct video opening, use YouTube watch URL
+    # If you want to search, use the search_url instead
+    
+    try:
+        animate_opening(query)
+        
+        # Open in Termux using termux-open-url (requires termux-api)
+        # This will open in the default browser or YouTube app
+        subprocess.run(['termux-open-url', search_url], check=True)
+        
+        print("✅ Video opened successfully!")
+        return True
+        
+    except FileNotFoundError:
+        print("\n❌ Error: termux-open-url not found!")
+        print("📦 Install termux-api package:")
+        print("   pkg install termux-api")
+        return False
+        
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        return False
+
+def open_video_url(url):
+    """Open a direct YouTube video URL"""
+    try:
+        # Extract video title from URL (simplified)
+        video_id = url.split('v=')[-1].split('&')[0] if 'v=' in url else 'Video'
+        
+        animate_opening(f"YouTube Video: {video_id}")
+        
+        subprocess.run(['termux-open-url', url], check=True)
+        print("✅ Video opened successfully!")
+        return True
+        
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        return False
+
+def main():
+    """Main function"""
+    print_banner()
+    
+    if len(sys.argv) < 2:
+        print("Usage:")
+        print("  python yt_opener.py <search query>")
+        print("  python yt_opener.py <youtube url>")
+        print("\nExamples:")
+        print("  python yt_opener.py python tutorial")
+        print("  python yt_opener.py https://youtube.com/watch?v=dQw4w9WgXcQ")
+        sys.exit(1)
+    
+    query = ' '.join(sys.argv[1:])
+    
+    # Check if it's a URL or search query
+    if query.startswith('http://') or query.startswith('https://'):
+        open_video_url(query)
+    else:
+        search_and_open(query)
+
+if __name__ == "__main__":
+    main()
