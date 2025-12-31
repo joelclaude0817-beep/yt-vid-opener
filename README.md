@@ -46,11 +46,11 @@ Download and install the **Termux:API** app from the same source where you got T
 
 ```bash
 # Clone this repository
-git clone https://github.com/yourusername/youtube-video-opener.git
+git clone https://github.com/joelclaude0817-beep/youtube-video-opener.git
 cd youtube-video-opener
 
 # Or download directly
-curl -O https://raw.githubusercontent.com/yourusername/youtube-video-opener/main/yt_opener.py
+curl -O https://raw.githubusercontent.com/joelclaude0817-beep/youtube-video-opener/main/yt_opener.py
 ```
 
 ### Step 4: Make Script Executable
